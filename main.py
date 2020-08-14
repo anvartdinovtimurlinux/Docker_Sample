@@ -22,9 +22,8 @@ def work_with_db(method, obj):
 
 @app.route('/<id_good>', methods=['GET'])
 def get_good(id_good):
-    goods_base = connect_db()
     try:
-        good = work_with_db(goods_base.find_one, {'_id': ObjectId(id_good)})
+        good = work_with_db(connect_db().find_one, {'_id': ObjectId(id_good)})
         if good:
             return jsonify({'name': good['name']}), 200
         return jsonify({'error': 'no database connection'}), 503
@@ -34,13 +33,11 @@ def get_good(id_good):
 
 @app.route('/', methods=['POST'])
 def create_good():
-    goods_base = connect_db()
-
     if not request.json.get('name_good'):
         return jsonify({'error': 'Invalid format data'}), 400
 
     good = {'name': request.json.get('name_good')}
-    result = work_with_db(goods_base.insert_one, good)
+    result = work_with_db(connect_db().insert_one, good)
 
     if result:
         return jsonify({'_id': str(result.inserted_id), 'name': good['name']}), 200
