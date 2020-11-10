@@ -1,4 +1,4 @@
-# social_links_tz
+# Docker_Sample
 Для запуска напишите в консоли
 ```
 docker-compose up --build
